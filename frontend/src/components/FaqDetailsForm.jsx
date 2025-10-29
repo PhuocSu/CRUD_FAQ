@@ -47,7 +47,7 @@ const FaqDetailsForm = () => {
         }
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (isTemporarySave) => {
         if (!title.trim()
             || !questionTopic
             || !content.trim()
@@ -60,13 +60,14 @@ const FaqDetailsForm = () => {
         formData.append("title", title)
         formData.append("questionTopic", questionTopic)
         formData.append("content", content)
+        formData.append("isTemporarySave", isTemporarySave)
         if (attachFile) {
             formData.append("attachFile", attachFile) // key phải khớp upload.single('attachFile')
         }
 
         try {
             setLoading(true)
-            console.log("📝 Creating FAQ:", { title, questionTopic, content, attachFile });
+            // console.log("📝 Creating FAQ:", { title, questionTopic, content, attachFile });
 
             const res = await axios.post("http://localhost:3002/faqs", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
