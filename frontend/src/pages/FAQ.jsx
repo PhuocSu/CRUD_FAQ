@@ -12,6 +12,7 @@ import { Flex, Layout } from 'antd';
 import { useEffect } from 'react';
 import faqService from '../services/faqService.js'
 
+
 const { Header, Footer, Sider, Content } = Layout;
 
 const headerStyle = {
@@ -75,7 +76,7 @@ const FAQHomepage = () => {
     setSelectedTopic(topic)
     setCurrentPage(1) // Reset to first page when changing tabs
 
-    if(topic === "전체") {
+    if (topic === "전체") {
       setFilteredFaqs(faqs)
     } else {
       const filtered = faqs.filter((faq) => faq.questionTopic === topic)
@@ -119,6 +120,31 @@ const FAQHomepage = () => {
     }
   }
 
+  const handleDeleteFaq = async (id) => {
+    // console.log('1. handleDeleteFaq called with id:', id);
+    try {
+      await faqService.deleteFaq(id); 
+      message.success('삭제되었습니다.');
+
+      // Cập nhật lại danh sách ở local state
+      const updatedFaqs = faqs.filter((faq) => faq.id !== id);
+      setFaqs(updatedFaqs);
+
+      // Nếu đang lọc theo topic
+      if (selectedTopic === "전체") {
+        setFilteredFaqs(updatedFaqs);
+      } else {
+        const filtered = updatedFaqs.filter((faq) => faq.questionTopic === selectedTopic);
+        setFilteredFaqs(filtered);
+      }
+
+    } catch (error) {
+      console.error('Error deleting FAQ:', error);
+      message.error('삭제 중 오류가 발생했습니다.');
+    }
+  };
+
+
 
   return (
     <div style={{ width: '100%', margin: 0, padding: 0 }}>
@@ -148,6 +174,7 @@ const FAQHomepage = () => {
                 setTotal={handleTotalChange}
                 currentPage={currentPage}
                 pageSize={pageSize}
+                onDelete={handleDeleteFaq}
               />
             </div>
 

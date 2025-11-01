@@ -2,8 +2,12 @@ import React from 'react';
 import FaqCard from './FaqCard';
 import { Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import faqService from '../services/faqService';
 
-const FaqList = ({ faqs }) => {
+const FaqList = ({ faqs, onDelete }) => {
+
+  console.log('3. FaqList - onDelete prop:', typeof onDelete, onDelete);
+
   if (!faqs || faqs.length === 0) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -25,6 +29,7 @@ const FaqList = ({ faqs }) => {
             <FaqCard
               key={faq.id}
               faq={faq}
+              onDelete={onDelete}
             />
           )
         })

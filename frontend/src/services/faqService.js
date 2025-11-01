@@ -22,17 +22,27 @@ const faqService = {
     // },
 
     //fetchFAQ
-    fetchFaqs : async () => {
+    fetchFaqs: async () => {
         const res = await axios.get(`${API_URL}`)
         // console.log(res.data)
         return res.data;
     },
 
-    searchFaqs : async (keyword) => {
+    searchFaqs: async (keyword) => {
         if (!keyword || keyword.trim() === '') return [];
         const res = await axios.get(`${API_URL}/search?keyword=${encodeURIComponent(keyword)}`)
         return res.data;
-    }
+    },
+
+    deleteFaq: async (id) => {
+      try {
+        await axios.delete(`${API_URL}/${id}`);
+        return true;
+      } catch (error) {
+        console.error('Error deleting FAQ:', error);
+        return false;
+      }
+    },
 
 }
 

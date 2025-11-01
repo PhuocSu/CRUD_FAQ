@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Tabs } from 'antd';
+import { message, Modal, Tabs } from 'antd';
 import FaqList from './FaqList.jsx';
 import faqService from '../services/faqService.js';
 
-const FaqTabs = ({ faqs, onTabChange, setTotal, currentPage, pageSize }) => {
+const FaqTabs = ({ faqs, onTabChange, setTotal, currentPage, pageSize, onDelete }) => {
+  console.log('2. FaqTabs - onDelete prop:', typeof onDelete, onDelete);
+
   const [activeKey, setActiveKey] = useState('1')
 
   //map giữa key tab và topic
@@ -57,7 +59,9 @@ const FaqTabs = ({ faqs, onTabChange, setTotal, currentPage, pageSize }) => {
       label: tabTopic[key],
       children: (
         <div>
-          <FaqList faqs={key === activeKey ? pageFaqs : []} />
+          <FaqList
+            faqs={key === activeKey ? pageFaqs : []}
+            onDelete={onDelete} />
         </div>
       )
     }
@@ -67,7 +71,7 @@ const FaqTabs = ({ faqs, onTabChange, setTotal, currentPage, pageSize }) => {
     <Tabs
       defaultActiveKey="1"
       activeKey={activeKey}
-      onChange={handleTabChange} 
+      onChange={handleTabChange}
       items={items}
     />
   );

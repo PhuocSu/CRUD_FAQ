@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
-import { Button, Col, Row, Typography } from 'antd'
+import { Button, Col, message, Modal, Row, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom';
+import faqService from '../services/faqService.js';
+import axios from 'axios';
 
-const FaqCard = ({ faq }) => {
+const FaqCard = ({ faq, onDelete }) => {
+  // console.log('4. FaqCard - onDelete prop:', typeof onDelete, onDelete);
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const navigate = useNavigate()
@@ -18,10 +22,23 @@ const FaqCard = ({ faq }) => {
     navigate('/faq/write', { state: { faqData: faq, isTemporaryMode: true } })
   }
 
-
   //Khi nhấn "삭제"
-  const handleTemporaryDelete = () => {
-    navigate('/faq/write', { state: { faqData: faq, isTemporaryMode: true } })
+  const handleDelete = (id) => {
+    Modal.confirm({
+      title: '알림',
+      content: '게시물을 삭제하시겠습니까?',
+      okText: '확인',
+      cancelText: '취소',
+      okType: 'danger',
+      onOk: async () => {
+        console.log("Confirm pressed for id:", id); // ✅ kiểm tra có chạy tới đây không
+        if (typeof onDelete === 'function') {
+          await onDelete(id); // 👈 Gọi callback từ Homepage
+        } else {
+          console.warn("onDelete is not a function");
+        }
+      }
+    });
   }
 
   const onToggleDropdown = () => {
@@ -131,6 +148,7 @@ const FaqCard = ({ faq }) => {
               height: '32px',
               padding: '0 12px',
             }}
+            onClick={() => handleDelete(faq.id)}
           >
             삭제
           </Button>
