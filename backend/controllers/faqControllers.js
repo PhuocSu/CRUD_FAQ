@@ -24,11 +24,13 @@ export const createFaq = async (req, res) => {
 
     // Nếu file được upload thì CloudinaryStorage đã xử lý rồi
     const fileUrl = req.file ? req.file.path : null; // CloudinaryStorage tự thêm .path = URL
+    const originalFileName = req.file ? req.file.originalname : null; // ✅ Tên file gốc có .png
 
     const newFaq = await FAQ.create({
       title,
       questionTopic,
       attachFile: fileUrl,
+      attachFileName: originalFileName,
       content,
       isTemporarySaved: isTemporarySaved || false,
     });
@@ -54,11 +56,16 @@ export const updateFaq = async (req, res) => {
       return res.status(404).json({ error: "FAQ not found" });
     }
 
+    // Nếu có upload file mới thì cập nhật
+    const fileUrl = req.file ? req.file.path : faq.attachFile;
+    const originalFileName = req.file ? req.file.originalname : faq.attachFileName;
+
     // Update FAQ
     await faq.update({
       title,
       questionTopic,
-      attachFile,
+      attachFile: fileUrl,
+      attachFileName: originalFileName,
       content,
       isTemporarySaved
     });

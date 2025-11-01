@@ -1,21 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row, Input, Select, Button, message } from 'antd';
 import { Editor } from '@tinymce/tinymce-react';
 import axios from 'axios';
 import ActionButtons from './ActionButtons';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRef } from 'react';
 
 const { Option } = Select;
 
 const FaqDetailsForm = () => {
     const navigate = useNavigate();
+
+    const location = useLocation();
+    const faqData = location.state?.faqData || null;
+
     const [title, setTitle] = useState("")
     const [questionTopic, setQuestionTopic] = useState(undefined) // hoặc null là hiện placeholder
     const [attachFile, setAttachFile] = useState(null)
     const [selectedFileName, setSelectedFileName] = useState("선택된 파일 없음") //chỉ dùng đẻ hiển thị tên file ra giao diện người dùng
     const [content, setContent] = useState("")
     const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        if (faqData) {
+            setTitle(faqData.title || "");
+            setQuestionTopic(faqData.questionTopic || undefined);
+            setContent(faqData.content || "");
+            setAttachFile(faqData.attachFile || null);
+            setSelectedFileName(faqData.attachFileName || "선택된 파일 없음");
+        }
+    }, [faqData]);
+
 
     //dùng ref để trigger click cho input hidden
     const fileInputRef = useRef(null)
@@ -60,7 +75,7 @@ const FaqDetailsForm = () => {
         formData.append("title", title)
         formData.append("questionTopic", questionTopic)
         formData.append("content", content)
-        formData.append("isTemporarySave", isTemporarySave)
+        formData.append("isTemporarySaved", isTemporarySave)
         if (attachFile) {
             formData.append("attachFile", attachFile) // key phải khớp upload.single('attachFile')
         }
@@ -69,21 +84,31 @@ const FaqDetailsForm = () => {
             setLoading(true)
             // console.log("📝 Creating FAQ:", { title, questionTopic, content, attachFile });
 
-            const res = await axios.post("http://localhost:3002/faqs", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            console.log("Response: ", res.data)
-            message.success("저장되었습니다.")
+            if (faqData?.id) {
+                // Update existing FAQ
+                const res = await axios.put(`http://localhost:3002/faqs/${faqData.id}`, formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+                // console.log(faqData.id)
+                // console.log(res.data)
+                message.success("저장되었습니다.");
+                navigate('/faq'); // Navigate to FAQ list after update
+            } else {
+                // Create new FAQ
+                const res = await axios.post("http://localhost:3002/faqs", formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+                console.log(res.data)
+                message.success("저장되었습니다.");
 
-            //Reset về trang thái cũ
-            setTitle("")
-            setQuestionTopic(undefined)
-            setAttachFile(null)
-            setSelectedFileName("선택된 파일 없음")
-            setContent("")
-
-            //Turn back faq page
-            navigate('/faq')
+                // Reset form and navigate for new FAQ creation
+                setTitle("");
+                setQuestionTopic(undefined);
+                setAttachFile(null);
+                setSelectedFileName("선택된 파일 없음");
+                setContent("");
+                navigate('/faq');
+            }
 
         } catch (error) {
             console.error("Error creating FAQ:", {
@@ -95,10 +120,6 @@ const FaqDetailsForm = () => {
         } finally {
             setLoading(false)
         }
-    }
-
-    const handleTemporarySave = (e) => {
-
     }
 
     const handleCancel = (e) => {
@@ -247,7 +268,6 @@ const FaqDetailsForm = () => {
             <Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                 <ActionButtons
                     onSubmit={handleSubmit}
-                    onTemporarySave={handleTemporarySave}
                     onCancel={handleCancel}
                     onLoading={loading}
                 />

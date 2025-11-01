@@ -137,8 +137,9 @@ export const syncModels = async () => {
     console.log('Models available:', Object.keys(sequelize.models));
     console.log('🔄 Đang đồng bộ hóa models...');
 
-    // Đồng bộ tất cả models đã được định nghĩa
-    // await sequelize.sync({ force: true });
+    // Đồng bộ tất cả models đã được định nghĩa: 
+    // force: true => là lí do mất hết dữ liệu ban đầu
+    // await sequelize.sync({ alter: true }); //tự động cập nhật cột mới
     // console.log('✅ Đồng bộ hóa models thành công!');
   } catch (error) {
     console.error('❌ Lỗi khi đồng bộ hóa model:', error);

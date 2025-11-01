@@ -38,7 +38,11 @@ const FAQ = sequelize.define('FAQ', {
   attachFile: {
     type: DataTypes.STRING(500),
     allowNull: true,
-    comment: 'Lưu đường dẫn file (URL hoặc path)'
+    comment: 'Lưu đường dẫn file (URL hoặc path)' // URL Cloudinary
+  },
+  attachFileName: {
+    type: DataTypes.STRING,
+    allowNull: true, // Tên file gốc .png, .jpg,...
   },
   content: {
     type: DataTypes.TEXT,

@@ -9,14 +9,15 @@ const router = express.Router();
 // Dùng middleware upload cho route POST
 router.post("/", upload.single('attachFile'), createFaq); // 'attachFile' phải trùng với tên field trong formData
 
+router.put("/:id", upload.single('attachFile'), updateFaq);
+
+
 //Các route khác
 router.get("/count", getFaqCount);
 
 router.get("/search", getFaqSearch);
 
 router.get("/", getAllFaq);
-
-router.put("/:id", updateFaq);
 
 router.delete("/:id", deleteFaq);
 

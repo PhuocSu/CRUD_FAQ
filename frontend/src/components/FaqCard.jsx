@@ -1,8 +1,28 @@
 import React, { useState } from 'react'
 import { Button, Col, Row, Typography } from 'antd'
+import { useNavigate } from 'react-router-dom';
 
 const FaqCard = ({ faq }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const navigate = useNavigate()
+
+
+  // Khi nhấn "수정"
+  const handleEdit = () => {
+    navigate('/faq/write', { state: { faqData: faq } })
+  }
+
+  //Khi nhấn "임시저장"
+  const handleTemporaryEdit = () => {
+    navigate('/faq/write', { state: { faqData: faq, isTemporaryMode: true } })
+  }
+
+
+  //Khi nhấn "삭제"
+  const handleTemporaryDelete = () => {
+    navigate('/faq/write', { state: { faqData: faq, isTemporaryMode: true } })
+  }
 
   const onToggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -51,7 +71,15 @@ const FaqCard = ({ faq }) => {
               padding: '8px 0',
             }}
           >
-            {faq?.title}
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ marginRight: 8 }}>{faq?.title}</div>
+              <div>{faq?.isTemporarySaved && (
+                <div style={{ width: 53, height: 16, position: 'relative', background: '#555555', borderRadius: 8, cursor: 'pointer' }}>
+                  <div style={{ width: 37, height: 13, left: 8, top: 0.50, position: 'absolute', textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'white', fontSize: 10, fontFamily: 'Noto Sans KR', fontWeight: '400', lineHeight: 35, wordWrap: 'break-word' }}
+                    onClick={handleTemporaryEdit} >임시저장</div>
+                </div>
+              )}</div>
+            </div>
           </Col>
           <Col
             span={12}
@@ -77,18 +105,23 @@ const FaqCard = ({ faq }) => {
             marginRight: '16px',
           }}
         >
-          <Button
-            type="text"
-            style={{
-              color: '#666666',
-              border: '1px solid #CECED3',
-              fontSize: '13px',
-              height: '32px',
-              padding: '0 12px',
-            }}
-          >
-            수정
-          </Button>
+          {
+            faq?.isTemporarySaved === false && (
+              <Button
+                type="text"
+                style={{
+                  color: '#666666',
+                  border: '1px solid #CECED3',
+                  fontSize: '13px',
+                  height: '32px',
+                  padding: '0 12px',
+                }}
+                onClick={handleEdit}
+              >
+                수정
+              </Button>
+            )
+          }
           <Button
             type="text"
             style={{
@@ -155,10 +188,10 @@ const FaqCard = ({ faq }) => {
             <div style={{ marginTop: '16px' }}>
               {faq.attachFile.match(/\.(jpg|jpeg|png|gif)$/i) ? (
                 <div style={{ maxWidth: '100%', marginTop: '8px' }}>
-                  <img 
-                    src={faq.attachFile} 
-                    alt="Attachment" 
-                    style={{ 
+                  <img
+                    src={faq.attachFile}
+                    alt="Attachment"
+                    style={{
                       maxWidth: '100%',
                       maxHeight: '300px',
                       borderRadius: '4px',
