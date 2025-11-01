@@ -6,7 +6,7 @@ import faqService from '../services/faqService';
 
 const FaqList = ({ faqs, onDelete }) => {
 
-  console.log('3. FaqList - onDelete prop:', typeof onDelete, onDelete);
+  // console.log('3. FaqList - onDelete prop:', typeof onDelete, onDelete);
 
   if (!faqs || faqs.length === 0) {
     return (

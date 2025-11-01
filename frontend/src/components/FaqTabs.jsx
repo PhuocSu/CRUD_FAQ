@@ -4,7 +4,7 @@ import FaqList from './FaqList.jsx';
 import faqService from '../services/faqService.js';
 
 const FaqTabs = ({ faqs, onTabChange, setTotal, currentPage, pageSize, onDelete }) => {
-  console.log('2. FaqTabs - onDelete prop:', typeof onDelete, onDelete);
+  // console.log('2. FaqTabs - onDelete prop:', typeof onDelete, onDelete);
 
   const [activeKey, setActiveKey] = useState('1')
 

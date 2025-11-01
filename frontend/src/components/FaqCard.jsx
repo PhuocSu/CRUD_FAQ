@@ -31,7 +31,7 @@ const FaqCard = ({ faq, onDelete }) => {
       cancelText: '취소',
       okType: 'danger',
       onOk: async () => {
-        console.log("Confirm pressed for id:", id); // ✅ kiểm tra có chạy tới đây không
+        // console.log("Confirm pressed for id:", id); // ✅ kiểm tra có chạy tới đây không
         if (typeof onDelete === 'function') {
           await onDelete(id); // 👈 Gọi callback từ Homepage
         } else {
@@ -198,7 +198,9 @@ const FaqCard = ({ faq, onDelete }) => {
         >
           {faq?.content && (
             <div style={{ marginBottom: '16px', whiteSpace: 'pre-line' }}>
-              <Typography.Text>{stripHtml(faq.content)}</Typography.Text>
+              <Typography.Paragraph>
+                <div dangerouslySetInnerHTML={{ __html: faq.content || '' }} />
+              </Typography.Paragraph>
             </div>
           )}
 

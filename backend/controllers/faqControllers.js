@@ -49,36 +49,48 @@ export const createFaq = async (req, res) => {
 export const updateFaq = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, questionTopic, attachFile, content, isTemporarySaved } = req.body;
+    const { title, questionTopic, content, isTemporarySaved, fileDeleted } = req.body;
 
     const faq = await FAQ.findByPk(id);
     if (!faq) {
       return res.status(404).json({ error: "FAQ not found" });
     }
 
-    // Nếu có upload file mới thì cập nhật
-    const fileUrl = req.file ? req.file.path : faq.attachFile;
-    const originalFileName = req.file ? req.file.originalname : faq.attachFileName;
+    let fileUrl = faq.attachFile;
+    let originalFileName = faq.attachFileName;
 
-    // Update FAQ
+    // 🟢 Trường hợp 1: Có upload file mới
+    if (req.file) {
+      fileUrl = req.file.path;
+      originalFileName = req.file.originalname;
+    }
+    // 🔴 Trường hợp 2: Người dùng xóa file (bấm ❌)
+    else if (fileDeleted === "true") {
+      fileUrl = null;
+      originalFileName = null;
+    }
+
+    // 🟡 Trường hợp 3: Không đổi gì thì giữ nguyên
+    // Cập nhật FAQ
     await faq.update({
       title,
       questionTopic,
       attachFile: fileUrl,
       attachFileName: originalFileName,
       content,
-      isTemporarySaved
+      isTemporarySaved,
     });
 
     res.status(200).json({
       message: "FAQ updated successfully",
-      data: faq
+      data: faq,
     });
   } catch (error) {
     console.error("Error updating FAQ:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 // Delete FAQ
 export const deleteFaq = async (req, res) => {

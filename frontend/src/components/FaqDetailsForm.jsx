@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row, Input, Select, Button, message } from 'antd';
+import { CloseOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import axios from 'axios';
 import ActionButtons from './ActionButtons';
@@ -20,6 +21,7 @@ const FaqDetailsForm = () => {
     const [selectedFileName, setSelectedFileName] = useState("선택된 파일 없음") //chỉ dùng đẻ hiển thị tên file ra giao diện người dùng
     const [content, setContent] = useState("")
     const [loading, setLoading] = useState(false)
+    const [fileDeleted, setFileDeleted] = useState(false);
 
     useEffect(() => {
         if (faqData) {
@@ -75,9 +77,14 @@ const FaqDetailsForm = () => {
         formData.append("title", title)
         formData.append("questionTopic", questionTopic)
         formData.append("content", content)
-        formData.append("isTemporarySaved", isTemporarySave)
+        formData.append("isTemporarySaved", isTemporarySave.toString());
+
         if (attachFile) {
             formData.append("attachFile", attachFile) // key phải khớp upload.single('attachFile')
+        }
+
+        if(fileDeleted){
+            formData.append("fileDeleted", true)
         }
 
         try {
@@ -204,6 +211,21 @@ const FaqDetailsForm = () => {
                                 borderRadius: '4px',
                                 border: '1px solid #CECED3',
                             }}
+
+                            //nơi đặt crossline
+                            suffix={
+                                attachFile && (
+                                    <CloseOutlined
+                                        style={{ color: '#000000', cursor: 'pointer' }}
+                                        onClick={() => {
+                                            setAttachFile(null);
+                                            setSelectedFileName("선택된 파일 없음");
+                                            setFileDeleted(true);
+                                        }}
+                                    />
+                                )
+                            }
+
                         />
                         {/* Thẻ input không tương thích với INPUT của ant-design => thêm therinput nhỏ*/}
                         <input
