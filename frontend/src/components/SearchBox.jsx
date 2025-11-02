@@ -32,6 +32,11 @@ const SearchBox = ({ onSearch }) => {
         style={{ width: 250, height: 40, paddingLeft: 12, paddingRight: 12, paddingTop: 8, paddingBottom: 8, background: 'var(--input-field-bg-enabled, white)', borderRadius: 2, outline: '1px var(--input-field-stroke-enabled, #CECED3) solid', outlineOffset: '-1px', justifyContent: 'flex-end', alignItems: 'center', display: 'inline-flex' }}
         value={keyword}
         onChange={handleChange}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            handleClick();
+          }
+        }}
       />
 
       <Button

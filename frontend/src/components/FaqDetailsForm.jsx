@@ -77,8 +77,7 @@ const FaqDetailsForm = () => {
         formData.append("title", title)
         formData.append("questionTopic", questionTopic)
         formData.append("content", content)
-        formData.append("isTemporarySaved", isTemporarySave.toString());
-
+        formData.append("isTemporarySaved", isTemporarySave)
         if (attachFile) {
             formData.append("attachFile", attachFile) // key phải khớp upload.single('attachFile')
         }
