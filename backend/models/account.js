@@ -18,23 +18,34 @@ const Account = sequelize.define('Account', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
+    autoIncrement: true,
+    index: true
+  },
+  displayedName: {
+    type: DataTypes.STRING(30),
+    allowNull: false,
   },
   username: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.STRING(12),
     allowNull: false,
     unique: true,
-    validate: {
-      notEmpty: true,
-      len: [3, 255]
-    }
+    index: true,
   },
   password: {
-    type: DataTypes.STRING(255),
+    type: DataTypes.STRING,
     allowNull: false,
-    validate: {
-      notEmpty: true
-    }
+    notEmpty: true,
+  },
+  email:{
+    type: DataTypes.STRING(50),
+    allowNull: false,
+    notEmpty: true,
+    isEmail: true
+  },
+  phoneNumber: {
+    type: DataTypes.STRING(11),
+    allowNull: false,
+    notEmpty: true,
   },
   role: {
     type: DataTypes.STRING(50),

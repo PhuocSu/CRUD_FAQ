@@ -151,7 +151,14 @@ const FAQHomepage = () => {
       <Layout style={layoutStyle}>
         <Header style={headerStyle}>
           <div style={{ flex: 1 }}>
-            {/* CHưa dùng đến */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 32, width: '100%' }}>
+              <div style={{ cursor: 'pointer' }}>
+                로그인
+              </div>
+              <div style={{ cursor: 'pointer' }}>
+                회원가입
+              </div>
+            </div>
           </div>
         </Header>
 
