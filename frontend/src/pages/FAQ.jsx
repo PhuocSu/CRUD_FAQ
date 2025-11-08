@@ -11,6 +11,8 @@ import FaqCard from '../components/FaqCard.jsx'
 import { Flex, Layout } from 'antd';
 import { useEffect } from 'react';
 import faqService from '../services/faqService.js'
+import AppHeader from '../components/AppHeader.jsx';
+import AppFooter from '../components/AppFooter.jsx';
 
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -123,7 +125,7 @@ const FAQHomepage = () => {
   const handleDeleteFaq = async (id) => {
     // console.log('1. handleDeleteFaq called with id:', id);
     try {
-      await faqService.deleteFaq(id); 
+      await faqService.deleteFaq(id);
       message.success('삭제되었습니다.');
 
       // Cập nhật lại danh sách ở local state
@@ -149,19 +151,8 @@ const FAQHomepage = () => {
   return (
     <div style={{ width: '100%', margin: 0, padding: 0 }}>
       <Layout style={layoutStyle}>
-        <Header style={headerStyle}>
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 32, width: '100%' }}>
-              <div style={{ cursor: 'pointer' }}>
-                로그인
-              </div>
-              <div style={{ cursor: 'pointer' }}>
-                회원가입
-              </div>
-            </div>
-          </div>
-        </Header>
 
+        <AppHeader />
 
         <Content style={contentStyle}>
           <div style={{
@@ -211,9 +202,7 @@ const FAQHomepage = () => {
         </Content>
 
 
-        <Footer style={footerStyle}>
-          ©2025 FAQ Application
-        </Footer>
+        <AppFooter />
       </Layout>
     </div>
   );
