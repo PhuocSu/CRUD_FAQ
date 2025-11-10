@@ -1,27 +1,31 @@
+// 
+
 import './App.css';
-import { BrowserRouter as Router, Route, Routes, BrowserRouter } from 'react-router-dom'
-import FAQ from './pages/FAQ'
-import FaqWrite from './pages/FaqWrite'
-import SigninPage from './pages/SigninPage'
-import SignupPage from './pages/SignupPage'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'; // ✅ bỏ Router thừa
+import FAQ from './pages/FAQ';
+import FaqWrite from './pages/FaqWrite';
+import SigninPage from './pages/SigninPage';
+import SignupPage from './pages/SignupPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
-
   return (
-    <>
-      <div style={{ height: '100%', width: '100%' }}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/faq" element={<FAQ />} />z
-            <Route path="/faq/write" element={<FaqWrite />} />
+    <div style={{ height: '100%', width: '100%' }}>
+      <BrowserRouter>
+        <Routes>
+          {/* 🌐 Public routes */}
+          <Route path="/signin" element={<SigninPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/" element={<FAQ />} />
 
-            <Route path="/signin" element={<SigninPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
-    </>
-  )
+          {/* 🔒 Protected routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/write" element={<FaqWrite />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
+  );
 }
 
-export default App
+export default App;

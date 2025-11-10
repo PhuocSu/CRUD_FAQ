@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { message, Modal, Tabs } from 'antd';
 import FaqList from './FaqList.jsx';
-import faqService from '../services/faqService.js';
+import faqService from '../services/FaqService.js';
 
 const FaqTabs = ({ faqs, onTabChange, setTotal, currentPage, pageSize, onDelete }) => {
   // console.log('2. FaqTabs - onDelete prop:', typeof onDelete, onDelete);

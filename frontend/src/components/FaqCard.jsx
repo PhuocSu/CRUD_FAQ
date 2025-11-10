@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import { Button, Col, message, Modal, Row, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom';
-import faqService from '../services/faqService.js';
+import faqService from '../services/FaqService.js';
 import axios from 'axios';
+import UseAuthStore from '../stores/UseAuthStore'
 
 const FaqCard = ({ faq, onDelete }) => {
   // console.log('4. FaqCard - onDelete prop:', typeof onDelete, onDelete);
 
+  const role = UseAuthStore(state => state.role);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const navigate = useNavigate()
@@ -14,12 +16,12 @@ const FaqCard = ({ faq, onDelete }) => {
 
   // Khi nhấn "수정"
   const handleEdit = () => {
-    navigate('/faq/write', { state: { faqData: faq } })
+    navigate('/write', { state: { faqData: faq } })
   }
 
   //Khi nhấn "임시저장"
   const handleTemporaryEdit = () => {
-    navigate('/faq/write', { state: { faqData: faq, isTemporaryMode: true } })
+    navigate('/write', { state: { faqData: faq, isTemporaryMode: true } })
   }
 
   //Khi nhấn "삭제"
@@ -43,12 +45,6 @@ const FaqCard = ({ faq, onDelete }) => {
 
   const onToggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  // Function to remove HTML tags from content
-  const stripHtml = (html) => {
-    if (!html) return '';
-    return html.replace(/<[^>]*>?/gm, '').trim();
   };
 
   return (
@@ -114,16 +110,35 @@ const FaqCard = ({ faq, onDelete }) => {
             {faq?.questionTopic}
           </Col>
         </Row>
-
-        <div
-          style={{
-            display: 'flex',
-            gap: '8px',
-            marginRight: '16px',
-          }}
-        >
-          {
-            faq?.isTemporarySaved === false && (
+        {
+          console.log("role", role)
+        }
+        {
+          role === "admin" && (
+            <div
+              style={{
+                display: 'flex',
+                gap: '8px',
+                marginRight: '16px',
+              }}
+            >
+              {
+                faq?.isTemporarySaved === false && (
+                  <Button
+                    type="text"
+                    style={{
+                      color: '#666666',
+                      border: '1px solid #CECED3',
+                      fontSize: '13px',
+                      height: '32px',
+                      padding: '0 12px',
+                    }}
+                    onClick={handleEdit}
+                  >
+                    수정
+                  </Button>
+                )
+              }
               <Button
                 type="text"
                 style={{
@@ -133,26 +148,14 @@ const FaqCard = ({ faq, onDelete }) => {
                   height: '32px',
                   padding: '0 12px',
                 }}
-                onClick={handleEdit}
+                onClick={() => handleDelete(faq.id)}
               >
-                수정
+                삭제
               </Button>
-            )
-          }
-          <Button
-            type="text"
-            style={{
-              color: '#666666',
-              border: '1px solid #CECED3',
-              fontSize: '13px',
-              height: '32px',
-              padding: '0 12px',
-            }}
-            onClick={() => handleDelete(faq.id)}
-          >
-            삭제
-          </Button>
-        </div>
+            </div>
+          )
+        }
+
 
         <div
           style={{

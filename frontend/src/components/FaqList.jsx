@@ -2,7 +2,7 @@ import React from 'react';
 import FaqCard from './FaqCard';
 import { Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import faqService from '../services/faqService';
+import faqService from '../services/FaqService';
 
 const FaqList = ({ faqs, onDelete }) => {
 

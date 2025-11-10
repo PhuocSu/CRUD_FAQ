@@ -1,14 +1,14 @@
 import React from 'react'
 import { Button, Input, message } from 'antd'
 import { SearchOutlined } from '@ant-design/icons';
-import faqService from '../services/faqService';
+import faqService from '../services/FaqService';
 import { useState } from 'react';
 
 const SearchBox = ({ onSearch }) => {
   const [keyword, setKeyword] = useState('')
 
   const handleClick = () => {
-    if(keyword.trim().length < 2){
+    if (keyword.trim().length < 2) {
       onSearch('')
       message.warning('검색어를 두 글자 이상 입력해주세요.')
       return;
@@ -19,7 +19,7 @@ const SearchBox = ({ onSearch }) => {
   const handleChange = ((e) => {
     const value = e.target.value
     setKeyword(value)
-    if(value.trim() === ''){
+    if (value.trim() === '') {
       onSearch('') //khi user xóa trống hiển thị lại tất cả
     }
   })

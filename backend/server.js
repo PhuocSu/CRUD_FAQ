@@ -5,11 +5,13 @@ import cors from "cors";
 import 'dotenv/config';
 import authRoute from "./routes/authRouters.js";
 import cookieParser from 'cookie-parser';
+import ProtectedRoute from "./middlewares/authMiddleware.js";
+import userRoute from "./routes/userRouters.js";
 
 //import các model đẫ dăng ký với Sequelize
-import './models/account.js';  
+import './models/account.js';
 import './models/faq.js';
-import './models/session.js';  
+import './models/session.js';
 import './models/association.js';
 
 // Import và gọi setupAssociations Ở ĐÂY (SAU KHI MODELS ĐÃ IMPORT)
@@ -29,11 +31,11 @@ app.use(cookieParser());
 
 //public route
 app.use("/auth", authRoute);
+app.use("/faqs", faqRoute);
 
 //private route
-
-
-app.use("/faqs", faqRoute);
+app.use(ProtectedRoute)
+app.use("/users", userRoute)
 
 // Error handling middleware
 app.use((err, req, res, next) => {

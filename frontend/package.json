@@ -13,12 +13,13 @@
     "@ant-design/icons": "^6.1.0",
     "@tinymce/tinymce-react": "^4.2.0",
     "antd": "^5.27.6",
-    "axios": "^1.12.2",
+    "axios": "^1.13.2",
     "multer": "^2.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.9.4",
-    "tinymce": "^5.10.5"
+    "tinymce": "^5.10.5",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",

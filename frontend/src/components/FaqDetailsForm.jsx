@@ -82,7 +82,7 @@ const FaqDetailsForm = () => {
             formData.append("attachFile", attachFile) // key phải khớp upload.single('attachFile')
         }
 
-        if(fileDeleted){
+        if (fileDeleted) {
             formData.append("fileDeleted", true)
         }
 
@@ -98,7 +98,7 @@ const FaqDetailsForm = () => {
                 // console.log(faqData.id)
                 // console.log(res.data)
                 message.success("저장되었습니다.");
-                navigate('/faq'); // Navigate to FAQ list after update
+                navigate('/'); // Navigate to FAQ list after update
             } else {
                 // Create new FAQ
                 const res = await axios.post("http://localhost:3002/faqs", formData, {
@@ -113,7 +113,7 @@ const FaqDetailsForm = () => {
                 setAttachFile(null);
                 setSelectedFileName("선택된 파일 없음");
                 setContent("");
-                navigate('/faq');
+                navigate('/');
             }
 
         } catch (error) {
@@ -136,7 +136,7 @@ const FaqDetailsForm = () => {
         setContent('')
         message.info('작성한 내용이 초기화되었습니다.')
         //Turn back faq page
-        navigate('/faq')
+        navigate('/')
     }
 
     return (

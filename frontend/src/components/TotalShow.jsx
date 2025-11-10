@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import faqService from '../services/faqService.js' //lấy từ frontend
+import faqService from '../services/FaqService.js' //lấy từ frontend
 
 const TotalShow = ({ total }) => { //component được selected (SelectedTopic)
 

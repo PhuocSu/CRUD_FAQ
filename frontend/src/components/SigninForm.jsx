@@ -1,47 +1,45 @@
-import React, { useEffect, useState } from 'react';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Checkbox, Flex } from 'antd';
+import React from 'react'
+import { Form, Input, Button } from 'antd'
 
-const LoginForm = () => {
-    const onFinish = values => {
-        console.log('Received values of form: ', values);
-    };
+const SigninForm = ({ onSubmit }) => {
+    const [form] = Form.useForm()
+
+    const handleFinish = (values) => {
+        if (onSubmit) {
+            onSubmit(values)
+        }
+    }
+
     return (
         <Form
-            name="login"
-            initialValues={{ remember: true }}
-            style={{ maxWidth: 360 }}
-            onFinish={onFinish}
+            form={form}
+            layout="vertical"
+            onFinish={handleFinish}
         >
             <Form.Item
-                name="username"
-                rules={[{ required: true, message: 'Please input your Username!' }]}
+                label="Tên đăng nhập"
+                name="username"  // 👈 đổi từ email sang username
+                rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
             >
-                <Input prefix={<UserOutlined />} placeholder="Username" />
+                <Input placeholder="Nhập tên đăng nhập của bạn" />
             </Form.Item>
+
             <Form.Item
+                label="Mật khẩu"
                 name="password"
-                rules={[{ required: true, message: 'Please input your Password!' }]}
+                rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
             >
-                <Input prefix={<LockOutlined />} type="password" placeholder="Password" />
-            </Form.Item>
-            <Form.Item>
-                <Flex justify="space-between" align="center">
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox>Remember me</Checkbox>
-                    </Form.Item>
-                    <a href="">Forgot password</a>
-                </Flex>
+                <Input.Password placeholder="Nhập mật khẩu" />
             </Form.Item>
 
             <Form.Item>
-                <Button block type="primary" htmlType="submit">
-                    Log in
+                <Button type="primary" htmlType="submit" block>
+                    Đăng nhập
                 </Button>
-                or <a href="">Register now!</a>
             </Form.Item>
         </Form>
-    );
+    )
 }
 
-export default LoginForm
+export default SigninForm
+

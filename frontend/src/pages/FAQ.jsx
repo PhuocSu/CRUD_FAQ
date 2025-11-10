@@ -10,7 +10,7 @@ import FaqTabs from "../components/FaqTabs.jsx"
 import FaqCard from '../components/FaqCard.jsx'
 import { Flex, Layout } from 'antd';
 import { useEffect } from 'react';
-import faqService from '../services/faqService.js'
+import faqService from '../services/FaqService.js'
 import AppHeader from '../components/AppHeader.jsx';
 import AppFooter from '../components/AppFooter.jsx';
 

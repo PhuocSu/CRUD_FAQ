@@ -30,7 +30,7 @@ const SignupForm = () => {
             <Form.Item name={['user', 'displayName']} label="displayName" rules={[{ required: true }]}>
                 <Input />
             </Form.Item>
-            <Form.Item name={['user', 'username']} label="username" rules={[{ type: 'email' }]}>
+            <Form.Item name={['user', 'username']} label="username" rules={[{ type: 'email', required: true }]}>
                 <Input />
             </Form.Item>
             <Form.Item
