@@ -20,11 +20,13 @@ const UseAuthStore = create(
             signup: async (displayedName, username, password, email, phoneNumber) => {
                 try {
                     set({ loading: true });
-                    await AuthService.signup(displayedName, username, password, email, phoneNumber);
-                    console.log("Đăng ký thành công! Chuyển sang trang đăng nhập");
+                    const res = await AuthService.signup(displayedName, username, password, email, phoneNumber);
+                    console.log('User after signin:', res.user); // Debug log
+                    return { success: true };
                 } catch (error) {
                     console.error(error);
                     console.log("Đăng ký thất bại!");
+                    throw error; // 👈 THÊM DÒNG NÀY ĐỂ component biết có lỗi
                 } finally {
                     set({ loading: false });
                 }
@@ -62,6 +64,7 @@ const UseAuthStore = create(
                 } catch (error) {
                     console.error(error);
                     console.log("Đăng xuất thất bại!");
+                    throw error;
                 }
             },
 
@@ -83,6 +86,7 @@ const UseAuthStore = create(
                 } catch (error) {
                     console.error("Lấy thông tin người dùng thất bại!", error);
                     set({ user: null, role: null });
+                    throw error;
                 } finally {
                     set({ loading: false });
                 }

@@ -1,8 +1,10 @@
 import React from 'react';
-import { Layout } from 'antd';
+import { Layout, message } from 'antd';
 import AppHeader from '../components/AppHeader';
 import AppFooter from '../components/AppFooter';
 import SignupForm from '../components/SignupForm';
+import { useNavigate } from 'react-router-dom';
+import UseAuthStore from '../stores/UseAuthStore';
 
 const { Content } = Layout;
 
@@ -21,6 +23,22 @@ const contentStyle = {
 };
 
 const SignupPage = () => {
+    const navigate = useNavigate();
+    const { signup } = UseAuthStore()
+
+    const handleSubmit = async (values) => {
+        try {
+            const { displayedName, username, password, email, phoneNumber } = values;
+            await signup(displayedName, username, password, email, phoneNumber);
+            message.success('Đăng ký thành công! Vui lòng đăng nhập.');
+            navigate('/signin');
+        } catch (error) {
+            console.error('Signup error:', error);
+            message.error('Đăng ký thất bại. Vui lòng thử lại!');
+        }
+    }
+
+
     return (
         <Layout
             style={{
@@ -43,7 +61,7 @@ const SignupPage = () => {
                         maxWidth: '450px', // ✅ giới hạn form vừa phải
                     }}
                 >
-                    <SignupForm />
+                    <SignupForm onSubmit={handleSubmit} />
                 </div>
             </Content>
 
