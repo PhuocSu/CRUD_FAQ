@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import Account from '../models/account.js'
 
-const ProtectedRoute = (req, res, next) => {
+const protectedRoute = (req, res, next) => {
     try {
         const authHeader = req.headers["authorization"]
         const token = authHeader && authHeader.split(" ")[1]
@@ -27,9 +27,10 @@ const ProtectedRoute = (req, res, next) => {
         })
 
     } catch (error) {
-        console.log("Error in ProtectedRoute: ", error)
+        console.log("Error in protectedRoute: ", error)
         return res.status(500).json({ message: "Internal server error" })
     }
 }
 
-export default ProtectedRoute
+export default protectedRoute
+

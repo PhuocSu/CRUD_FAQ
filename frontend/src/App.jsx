@@ -16,10 +16,10 @@ function App() {
           {/* 🌐 Public routes */}
           <Route path="/signin" element={<SigninPage />} />
           <Route path="/signup" element={<SignupPage />} />
-          <Route path="/" element={<FAQ />} />
 
           {/* 🔒 Protected routes */}
           <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<FAQ />} />
             <Route path="/write" element={<FaqWrite />} />
           </Route>
         </Routes>

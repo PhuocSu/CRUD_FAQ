@@ -14,7 +14,7 @@ const UseAuthStore = create(
             setAccessToken: (accessToken) => set({ accessToken }),
 
             clearState: () => {
-                set({ accessToken: null, user: null, loading: false });
+                set({ accessToken: null, user: null, loading: false, role: null });
             },
 
             signup: async (displayedName, username, password, email, phoneNumber) => {
@@ -37,10 +37,10 @@ const UseAuthStore = create(
                     set({ loading: true });
                     const res = await AuthService.signin(username, password);
                     if (res && res.accessToken) {
+                        get().setAccessToken(res.accessToken);
                         set({
-                            accessToken: res.accessToken,
                             user: res.user,
-                            role: res.data.user.role,
+                            role: res.user.role,
                             loading: false
                         });
 
@@ -58,7 +58,8 @@ const UseAuthStore = create(
             signout: async () => {
                 try {
                     await AuthService.signout();
-                    set({ accessToken: null, user: null });
+                    get().clearState();
+
                     localStorage.removeItem("auth-storage"); // xóa toàn bộ dữ liệu persist
                     console.log("Đăng xuất thành công! Chuyển sang trang đăng nhập");
                 } catch (error) {
@@ -91,6 +92,28 @@ const UseAuthStore = create(
                     set({ loading: false });
                 }
             },
+            refresh: async () => {
+                try {
+                    console.log('🔄 Bắt đầu làm mới token...');
+                    set({ loading: true });
+                    const { user, fetchMe } = get() //lấy user, fetchMe trong stores
+                    const accessToken = await AuthService.refresh()
+                    console.log('✅ Token mới nhận được:', accessToken ? accessToken.substring(0, 20) + '...' : 'Không có token');
+                    get().setAccessToken(accessToken)
+                    console.log('✅ Đã cập nhật access token mới');
+
+                    if (!user) {
+                        await fetchMe()
+                    }
+
+                } catch (error) {
+                    console.error("Phiên đăng nhập hết hạn! Vui lòng đăng nhập lại!", error);
+                    get().clearState();
+                    throw error;
+                } finally {
+                    set({ loading: false });
+                }
+            }
         }),
         {
             name: "auth-storage",

@@ -5,7 +5,7 @@ import crypto from "crypto";
 import Session from "../models/session.js";
 
 
-const ACCESS_TOKEN_TTL = "30m"
+const ACCESS_TOKEN_TTL = "15s"
 const REFRESH_TOKEN_TTL = 14 * 24 * 60 * 60 * 1000
 
 export const signup = async (req, res) => {
@@ -94,7 +94,7 @@ export const signin = async (req, res) => {
             secure: true, //cookies chỉ hoạt động khi kết nối HTTPS
             sameSite: 'none', //cho phép fe, be chạy trên 2 domain khác nhau, nếu deploy fe, be chung => thay 'none' bằng strict
             maxAge: REFRESH_TOKEN_TTL,
-            path: '/api/auth/refresh' // Chỉ gửi cookie khi gọi đến route refresh token
+            path: '/auth/refresh' // Chỉ gửi cookie khi gọi đến route refresh token
         })
 
         //Trả accessToken về trong response
@@ -127,6 +127,38 @@ export const signout = async (req, res) => {
 
     } catch (error) {
         console.log("Error in signOut: ", error)
+        return res.status(500).json({ message: "Internal server error" })
+    }
+}
+
+export const refreshToken = async (req, res) => {
+    try {
+        const token = req.cookies?.refreshToken
+        if (!token) {
+            return res.status(401).json({ message: 'Refresh Token không tồn tại' })
+        }
+
+        const session = await Session.findOne({ where: { refreshToken: token } })
+        if (!session) {
+            return res.status(403).json({ message: 'Refresh Token không hợp lệ hoặc đã hết hạn' })
+        }
+
+        if (session.expiresAt < new Date()) {
+            return res.status(403).json({ message: 'Refresh Token đã hết hạn' })
+        }
+
+        const accessToken = jwt.sign(
+            {
+                userId: session.userId,
+            },
+            process.env.ACCESS_TOKEN_SECRET_KEY,
+            { expiresIn: ACCESS_TOKEN_TTL }
+        )
+
+        return res.status(200).json({ accessToken })
+
+    } catch (error) {
+        console.log("Error in refreshToken: ", error)
         return res.status(500).json({ message: "Internal server error" })
     }
 }

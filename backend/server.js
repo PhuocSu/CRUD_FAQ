@@ -5,7 +5,7 @@ import cors from "cors";
 import 'dotenv/config';
 import authRoute from "./routes/authRouters.js";
 import cookieParser from 'cookie-parser';
-import ProtectedRoute from "./middlewares/authMiddleware.js";
+import protectedRoute from "./middlewares/authMiddleware.js";
 import userRoute from "./routes/userRouters.js";
 
 //import các model đẫ dăng ký với Sequelize
@@ -34,7 +34,7 @@ app.use("/auth", authRoute);
 app.use("/faqs", faqRoute);
 
 //private route
-app.use(ProtectedRoute)
+app.use(protectedRoute)
 app.use("/users", userRoute)
 
 // Error handling middleware

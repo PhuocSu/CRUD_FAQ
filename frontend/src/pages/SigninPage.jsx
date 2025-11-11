@@ -3,36 +3,23 @@ import { Layout, message } from 'antd'
 import AppHeader from '../components/AppHeader'
 import AppFooter from '../components/AppFooter'
 import SigninForm from '../components/SigninForm'
-import AuthService from '../services/AuthService'
-import { useNavigate } from 'react-router-dom' // 👈 để chuyển trang
+import { useNavigate } from 'react-router-dom'
 import UseAuthStore from '../stores/UseAuthStore'
 
 const { Content } = Layout
 
 const SigninPage = () => {
     const navigate = useNavigate()
+    const { signin } = UseAuthStore()
 
     // 🧠 Xử lý khi form submit
     const handleSignIn = async (values) => {
         try {
-            const res = await AuthService.signin(values.username, values.password)
+            const res = await signin(values.username, values.password)
             console.log('Login response:', res)
 
-            if (res.accessToken) {
-                // 1️⃣ Lưu token vào store
-                UseAuthStore.getState().setAccessToken(res.accessToken)
-
-                // 2️⃣ Lấy thông tin user từ backend và lưu vào store
-                await UseAuthStore.getState().fetchMe()
-
-                // 3️⃣ Lưu token vào localStorage (tùy muốn)
-                localStorage.setItem('token', res.accessToken)
-
-                message.success('Đăng nhập thành công!')
-                navigate('/')
-            } else {
-                message.error('Không tìm thấy token trong phản hồi!')
-            }
+            message.success('Đăng nhập thành công!')
+            navigate('/')
         } catch (error) {
             console.error('Login error:', error)
             message.error('Sai tên đăng nhập hoặc mật khẩu!')

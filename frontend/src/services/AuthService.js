@@ -6,6 +6,7 @@ const AuthService = {
             const response = await api.post("/auth/signin",
                 { username, password },
                 { withCredentials: true });
+            console.log('Signin response:', response.data); // Đoạn này log toàn bộ response
             return response.data;
         } catch (error) {
             console.error("Signin error:", error);
@@ -38,6 +39,17 @@ const AuthService = {
             return response.data;
         } catch (error) {
             console.error("FetchMe error:", error);
+            throw error;
+        }
+    },
+    refresh: async () => {
+        try {
+            console.log('🔄 Gọi API refresh token...');
+            const response = await api.post("/auth/refresh", {}, { withCredentials: true });
+            console.log('✅ Phản hồi từ /auth/refresh:', response.data);
+            return response.data.accessToken;
+        } catch (error) {
+            console.error("Refresh error:", error);
             throw error;
         }
     }

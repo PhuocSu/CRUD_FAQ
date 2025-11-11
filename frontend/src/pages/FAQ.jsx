@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import faqService from '../services/FaqService.js'
 import AppHeader from '../components/AppHeader.jsx';
 import AppFooter from '../components/AppFooter.jsx';
+import api from '../config/api.js';
 
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -146,6 +147,17 @@ const FAQHomepage = () => {
     }
   };
 
+  const handleOnClickTest = async () => {
+    try {
+      await api.get("/users/test", { withCredentials: true })
+      message.success("Test thành công")
+
+    } catch (error) {
+      message.error("Test thất bại")
+      console.log(error)
+    }
+  }
+
 
 
   return (
@@ -163,6 +175,10 @@ const FAQHomepage = () => {
           }}>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <SearchBox onSearch={handleSearch} />
+            </div>
+
+            <div>
+              <Button onClick={handleOnClickTest}>TestTestTestTestTestTest</Button>
             </div>
 
             <div>
