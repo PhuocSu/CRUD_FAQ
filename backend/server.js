@@ -7,6 +7,7 @@ import authRoute from "./routes/authRouters.js";
 import cookieParser from 'cookie-parser';
 import protectedRoute from "./middlewares/authMiddleware.js";
 import userRoute from "./routes/userRouters.js";
+import { Sentry, requestHandler, errorHandler } from './utils/sentry.js';
 
 //import các model đẫ dăng ký với Sequelize
 import './models/account.js';
@@ -20,15 +21,31 @@ import setupAssociations from './models/association.js';
 const app = express();
 const PORT = process.env.PORT || 3002;
 
+// The request handler must be the first middleware on the app
+app.use(requestHandler);
+
+// The error handler must be before any other error middleware and after all controllers
+// Note: We'll add errorHandler at the end of the file
+
 // Middleware
 app.use(cors({
   origin: "http://localhost:5173",
-  credentials: true  // Quan trọng: cho phép gửi cookie qua CORS
+  credentials: true,  // Quan trọng: cho phép gửi cookie qua CORS
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 })) //cho phép frontend truy cập API
+
+app.options('*', cors()); // cho preflight
+
 app.use(express.json());
 app.use(cookieParser());
-// Routes
 
+app.get('/debug-sentry', (req, res) => {
+  throw new Error("Test Sentry!");
+});
+
+
+// Routes
 //public route
 app.use("/auth", authRoute);
 app.use("/faqs", faqRoute);
@@ -37,14 +54,8 @@ app.use("/faqs", faqRoute);
 app.use(protectedRoute)
 app.use("/users", userRoute)
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    error: "Something went wrong!",
-    message: process.env.NODE_ENV === "development" ? err.message : undefined,
-  });
-});
+// The error handler must be before any other error middleware and after all controllers
+app.use(errorHandler);
 
 // Khởi tạo server
 const startServer = async () => {

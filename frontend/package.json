@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "^6.1.0",
+    "@sentry/react": "^10.25.0",
+    "@sentry/tracing": "^7.120.4",
     "@tinymce/tinymce-react": "^4.2.0",
     "antd": "^5.27.6",
     "axios": "^1.13.2",
