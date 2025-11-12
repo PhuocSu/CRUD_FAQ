@@ -69,7 +69,6 @@ export const signin = async (req, res) => {
         const accessToken = jwt.sign(
             {
                 userId: user.id,
-                role: user.role // sau này cần
             },
             process.env.ACCESS_TOKEN_SECRET_KEY,
             { expiresIn: ACCESS_TOKEN_TTL }
@@ -105,7 +104,7 @@ export const signin = async (req, res) => {
                 id: user.id,
                 username: user.username,
                 displayedName: user.displayedName,
-                role: user.role
+                role: user.role //nhớ trả về fe
             }
         })
     } catch (error) {

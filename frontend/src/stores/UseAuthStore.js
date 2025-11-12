@@ -9,12 +9,11 @@ const UseAuthStore = create(
             accessToken: null,
             user: null,
             loading: false,
-            role: null,
 
             setAccessToken: (accessToken) => set({ accessToken }),
 
             clearState: () => {
-                set({ accessToken: null, user: null, loading: false, role: null });
+                set({ accessToken: null, user: null, loading: false });
             },
 
             signup: async (displayedName, username, password, email, phoneNumber) => {
@@ -40,7 +39,6 @@ const UseAuthStore = create(
                         get().setAccessToken(res.accessToken);
                         set({
                             user: res.user,
-                            role: res.user.role,
                             loading: false
                         });
 
@@ -57,8 +55,8 @@ const UseAuthStore = create(
 
             signout: async () => {
                 try {
-                    await AuthService.signout();
                     get().clearState();
+                    await AuthService.signout();
 
                     localStorage.removeItem("auth-storage"); // xóa toàn bộ dữ liệu persist
                     console.log("Đăng xuất thành công! Chuyển sang trang đăng nhập");
@@ -72,21 +70,13 @@ const UseAuthStore = create(
             fetchMe: async () => {
                 try {
                     set({ loading: true });
-                    const { accessToken } = get(); // Lấy token từ store
-                    if (!accessToken) throw new Error("No access token");
 
-                    const response = await api.get("/users/me", {
-                        headers: { Authorization: `Bearer ${accessToken}` } //gửi cả access token vào header
-                    });
+                    const user = await AuthService.fetchMe()
+                    set({ user })
 
-                    set({
-                        user: response.data,
-                        role: response.data.user.role
-                    });
-                    return response.data;
                 } catch (error) {
                     console.error("Lấy thông tin người dùng thất bại!", error);
-                    set({ user: null, role: null });
+                    set({ user: null, accessToken: null });
                     throw error;
                 } finally {
                     set({ loading: false });
@@ -121,7 +111,6 @@ const UseAuthStore = create(
             partialize: (state) => ({
                 accessToken: state.accessToken,
                 user: state.user,
-                role: state.role,
             }),
         }
     )

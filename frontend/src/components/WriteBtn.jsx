@@ -5,14 +5,15 @@ import UseAuthStore from '../stores/UseAuthStore';
 
 const WriteBtn = () => {
   const navigate = useNavigate();
-  const role = UseAuthStore(state => state.role);
+  const { user } = UseAuthStore();
+  const isAdmin = user?.role === 'admin';
 
   const handleClick = () => {
     navigate('/write');
   };
 
   return (
-    role === "admin" && (
+    isAdmin && (
       <Button
         onClick={handleClick}
         data-icon="none"

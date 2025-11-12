@@ -9,7 +9,7 @@ CREATE TABLE ACCOUNT (
   updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )
 
-*/ 
+*/
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/db.js";
 
@@ -36,7 +36,7 @@ const Account = sequelize.define('Account', {
     allowNull: false,
     notEmpty: true,
   },
-  email:{
+  email: {
     type: DataTypes.STRING(50),
     allowNull: false,
     notEmpty: true,

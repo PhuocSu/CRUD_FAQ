@@ -36,7 +36,7 @@ const AuthService = {
     fetchMe: async () => {
         try {
             const response = await api.get("/users/me", { withCredentials: true });
-            return response.data;
+            return response.data.user;
         } catch (error) {
             console.error("FetchMe error:", error);
             throw error;

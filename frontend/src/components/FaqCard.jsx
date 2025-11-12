@@ -8,7 +8,9 @@ import UseAuthStore from '../stores/UseAuthStore'
 const FaqCard = ({ faq, onDelete }) => {
   // console.log('4. FaqCard - onDelete prop:', typeof onDelete, onDelete);
 
-  const role = UseAuthStore(state => state.role);
+  // const role = UseAuthStore(state => state.role);
+  const { user } = UseAuthStore();
+  const isAdmin = user?.role === 'admin';
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const navigate = useNavigate()
@@ -111,10 +113,10 @@ const FaqCard = ({ faq, onDelete }) => {
           </Col>
         </Row>
         {
-          console.log("role", role)
+          console.log("role", user?.role)
         }
         {
-          role === "admin" && (
+          isAdmin && (
             <div
               style={{
                 display: 'flex',
