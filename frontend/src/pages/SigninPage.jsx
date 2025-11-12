@@ -5,12 +5,21 @@ import AppFooter from '../components/AppFooter'
 import SigninForm from '../components/SigninForm'
 import { useNavigate } from 'react-router-dom'
 import UseAuthStore from '../stores/UseAuthStore'
+import { useEffect } from 'react'
 
 const { Content } = Layout
 
 const SigninPage = () => {
     const navigate = useNavigate()
     const { signin } = UseAuthStore()
+    const { accessToken } = UseAuthStore()
+
+    // 🚀 Nếu đã đăng nhập -> redirect luôn
+    useEffect(() => {
+        if (accessToken) {
+            navigate('/', { replace: true })
+        }
+    }, [accessToken, navigate])
 
     // 🧠 Xử lý khi form submit
     const handleSignIn = async (values) => {

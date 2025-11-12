@@ -14,8 +14,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* 🌐 Public routes */}
-          <Route path="/signin" element={<SigninPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/signin" element={<SigninPage />} />
 
           {/* 🔒 Protected routes */}
           <Route element={<ProtectedRoute />}>

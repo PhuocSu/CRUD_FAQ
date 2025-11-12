@@ -147,16 +147,17 @@ const FAQHomepage = () => {
     }
   };
 
-  const handleOnClickTest = async () => {
-    try {
-      await api.get("/users/test", { withCredentials: true })
-      message.success("Test thành công")
+  //Test access token
+  // const handleOnClickTest = async () => {
+  //   try {
+  //     await api.get("/users/test", { withCredentials: true })
+  //     message.success("Test thành công")
 
-    } catch (error) {
-      message.error("Test thất bại")
-      console.log(error)
-    }
-  }
+  //   } catch (error) {
+  //     message.error("Test thất bại")
+  //     console.log(error)
+  //   }
+  // }
 
 
 
@@ -177,9 +178,9 @@ const FAQHomepage = () => {
               <SearchBox onSearch={handleSearch} />
             </div>
 
-            <div>
+            {/* <div>
               <Button onClick={handleOnClickTest}>TestTestTestTestTestTest</Button>
-            </div>
+            </div> */}
 
             <div>
               <FaqTabs
