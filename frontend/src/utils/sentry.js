@@ -1,11 +1,15 @@
 import * as Sentry from '@sentry/react';
 import { browserTracingIntegration } from '@sentry/browser';
 
+// console.log("Sentry DSN:", import.meta.env.VITE_SENTRY_DSN);
+// console.log("ENV:", import.meta.env.VITE_SENTRY_ENV);
+
+
 Sentry.init({
-    dsn: 'https://50a0ad6e7906a72a3d1a5be5ae08af9d@o4510350242021376.ingest.us.sentry.io/4510350302838784',
+    dsn: import.meta.env.VITE_SENTRY_DSN,
     integrations: [browserTracingIntegration()],
     tracesSampleRate: 1.0, // Điều chỉnh tỷ lệ lấy mẫu
-    environment: process.env.NODE_ENV,
+    environment: import.meta.env.VITE_SENTRY_ENV,
     release: 'your-project-name@1.0.0'
 });
 
