@@ -40,10 +40,6 @@ app.options('*', cors()); // cho preflight
 app.use(express.json());
 app.use(cookieParser());
 
-app.get('/debug-sentry', (req, res) => {
-  throw new Error("Test Sentry!");
-});
-
 
 // Routes
 //public route

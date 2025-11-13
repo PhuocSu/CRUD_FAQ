@@ -1,17 +1,45 @@
 import FAQ from "../models/faq.js";
 import faqService from "../services/faq.service.js";
 import cloudinary from '../config/cloudinary.js';
+import cacheService from '../services/cache.service.js';
 
 // Get all FAQs
+//C1: ko redis
+// export const getAllFaq = async (req, res) => {
+//   try {
+//     const faqs = await FAQ.findAll();
+//     res.status(200).json(faqs);
+//   } catch (error) {
+//     console.error("Error getting FAQs:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
+
+//C2: Có redis
 export const getAllFaq = async (req, res) => {
+  const cacheKey = 'faqs:all';
+
   try {
+    // ✅ Kiểm tra cache
+    const cachedData = await cacheService.get(cacheKey);
+    if (cachedData) {
+      console.log('Serving from cache');
+      return res.status(200).json(cachedData); // Return direct data without wrapper
+    }
+
+    // 🟡 Nếu không có cache → đọc DB
     const faqs = await FAQ.findAll();
+
+    // ✅ Lưu cache 1 tiếng
+    await cacheService.set(cacheKey, faqs, 3600);
+
     res.status(200).json(faqs);
   } catch (error) {
-    console.error("Error getting FAQs:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error getting FAQs:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 // ✅ Create a new FAQ (đã gỡ phần upload trùng)
 export const createFaq = async (req, res) => {
@@ -34,6 +62,9 @@ export const createFaq = async (req, res) => {
       content,
       isTemporarySaved: isTemporarySaved || false,
     });
+
+    //Xóa danh sách FAQ trong cache
+    await cacheService.del('faqs:all');
 
     res.status(201).json({
       message: "FAQ created successfully",
@@ -81,6 +112,9 @@ export const updateFaq = async (req, res) => {
       isTemporarySaved,
     });
 
+    // Xóa cache danh sách FAQ
+    await cacheService.del('faqs:all');
+
     res.status(200).json({
       message: "FAQ updated successfully",
       data: faq,
@@ -103,6 +137,9 @@ export const deleteFaq = async (req, res) => {
     }
 
     await faq.destroy();
+
+    // Xóa cache danh sách FAQ
+    await cacheService.del('faqs:all');
 
     res.status(200).json({
       message: "FAQ deleted successfully"
