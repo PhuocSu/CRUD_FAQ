@@ -37,7 +37,10 @@ const AppHeader = () => {
                             style={{ cursor: 'pointer' }}
                             onClick={handleSignout}
                         >로그아웃</div>
-                        <div style={{ cursor: 'pointer' }}>마이페이지</div>
+                        <div
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => navigate('/myPage')}
+                        >마이페이지</div>
                     </div>
                 ) : (
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 32, width: '100%' }}>

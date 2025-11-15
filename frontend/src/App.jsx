@@ -5,6 +5,7 @@ import SigninPage from './pages/SigninPage';
 import SignupPage from './pages/SignupPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import { SentryErrorBoundary } from './utils/sentry';
+import MyPage from './pages/MyPage';
 
 function App() {
   return (
@@ -83,6 +84,7 @@ function App() {
               <Route path="/signin" element={<SigninPage />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/" element={<FAQ />} />
+                <Route path="/myPage" element={<MyPage />} />
                 <Route path="/write" element={<FaqWrite />} />
               </Route>
             </Routes>

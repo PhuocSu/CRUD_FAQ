@@ -82,6 +82,19 @@ const UseAuthStore = create(
                     set({ loading: false });
                 }
             },
+            updateProfile: async (displayedName, password, email, phoneNumber) => {
+                try {
+                    set({ loading: true });
+                    const res = await AuthService.updateProfile(displayedName, password, email, phoneNumber);
+                    set({ user: res.user })
+                } catch (error) {
+                    console.error("Cập nhật thông tin người dùng thất bại!", error);
+                    set({ user: null, accessToken: null });
+                    throw error;
+                } finally {
+                    set({ loading: false });
+                }
+            },
             refresh: async () => {
                 try {
                     console.log('🔄 Bắt đầu làm mới token...');

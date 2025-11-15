@@ -202,9 +202,6 @@ const FAQHomepage = () => {
                 </Col>
                 <Col span={12} style={{ display: 'flex', justifyContent: 'flex-end', margin: '16px 0' }}>
                   <WriteBtn />
-                  <button onClick={() => Sentry.captureException(new Error("Button click test!"))}>
-                    Test Sentry
-                  </button>
 
                 </Col>
               </Row>

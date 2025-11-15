@@ -42,6 +42,19 @@ const AuthService = {
             throw error;
         }
     },
+
+    updateProfile: async (displayedName, password, email, phoneNumber) => {
+        try {
+            const response = await api.put("/users/me/profile",
+                { displayedName, password, email, phoneNumber },
+                { withCredentials: true }
+            );
+            return response.data;
+        } catch (error) {
+            console.error("UpdateProfile error:", error);
+            throw error;
+        }
+    },
     refresh: async () => {
         try {
             console.log('🔄 Gọi API refresh token...');

@@ -46,7 +46,7 @@ app.use(cookieParser());
 app.use("/auth", authRoute);
 app.use("/faqs", faqRoute);
 
-//private route
+//private router
 app.use(protectedRoute)
 app.use("/users", userRoute)
 
