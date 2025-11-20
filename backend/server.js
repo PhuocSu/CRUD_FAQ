@@ -31,7 +31,7 @@ app.use(requestHandler);
 // Note: We'll add errorHandler at the end of the file
 
 // Middleware
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'development') {
   app.use(cors({
     origin: "http://localhost:5173",
     credentials: true,  // Quan trọng: cho phép gửi cookie qua CORS
@@ -87,9 +87,10 @@ const startServer = async () => {
     console.log("✅ Đã đồng bộ hóa models với database");
 
     // 3️⃣ Khởi động server
-    app.listen(PORT, () => {
-      console.log(`🚀 Server đang chạy trên http://localhost:${PORT}`);
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`🚀 Server đang chạy trên port ${PORT}`);
     });
+
   } catch (error) {
     console.error("❌ Lỗi khi khởi động server:", error);
     process.exit(1);
