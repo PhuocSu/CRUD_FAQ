@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: crud-faq
+    env: node
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 18.x
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"
+    autoDeploy: true
