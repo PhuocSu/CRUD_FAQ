@@ -31,14 +31,25 @@ app.use(requestHandler);
 // Note: We'll add errorHandler at the end of the file
 
 // Middleware
-if (process.env.NODE_ENV === 'development') {
-  app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true,  // Quan trọng: cho phép gửi cookie qua CORS
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-  })); // cho phép frontend truy cập API
-}
+// Cho phép cả local dev và domain live
+const allowedOrigins = [
+  "http://localhost:5173", // local frontend
+  "https://crud-faq.onrender.com" // frontend live
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow non-browser requests
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = "The CORS policy does not allow access from this origin.";
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.options('*', cors()); // cho preflight
 
