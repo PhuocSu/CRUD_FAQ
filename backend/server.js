@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import protectedRoute from "./middlewares/authMiddleware.js";
 import userRoute from "./routes/userRouters.js";
 import { Sentry, requestHandler, errorHandler } from './utils/sentry.js';
+import path from "path"
 
 //import các model đẫ dăng ký với Sequelize
 import './models/account.js';
@@ -17,6 +18,8 @@ import './models/association.js';
 
 // Import và gọi setupAssociations Ở ĐÂY (SAU KHI MODELS ĐÃ IMPORT)
 import setupAssociations from './models/association.js';
+
+const __dirname = path.resolve();
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -28,12 +31,14 @@ app.use(requestHandler);
 // Note: We'll add errorHandler at the end of the file
 
 // Middleware
-app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,  // Quan trọng: cho phép gửi cookie qua CORS
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-})) //cho phép frontend truy cập API
+if (process.env.NODE_ENV !== 'production') {
+  app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,  // Quan trọng: cho phép gửi cookie qua CORS
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })); // cho phép frontend truy cập API
+}
 
 app.options('*', cors()); // cho preflight
 
@@ -47,11 +52,23 @@ app.use("/auth", authRoute);
 app.use("/faqs", faqRoute);
 
 //private router
-app.use(protectedRoute)
-app.use("/users", userRoute)
+app.use("/users", protectedRoute, userRoute);
 
 // The error handler must be before any other error middleware and after all controllers
 app.use(errorHandler);
+
+// ==================================RENDER================================
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+  // Serve frontend build for all other routes
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+  });
+}
+
+// ========================================================================
 
 // Khởi tạo server
 const startServer = async () => {

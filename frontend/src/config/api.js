@@ -1,8 +1,10 @@
 import axios from "axios";
 import UseAuthStore from "../stores/UseAuthStore";
 
+const BASE_URL = import.meta.env.MODE === "development" ? 'http://localhost:3002' : '/';
+
 const api = axios.create({
-    baseURL: 'http://localhost:3002',
+    baseURL: BASE_URL,
     withCredentials: true, //có ở đây thì dưới kia không cần
     headers: {
         'Content-Type': 'application/json',
