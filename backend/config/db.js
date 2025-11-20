@@ -1,18 +1,33 @@
 import { Sequelize } from "sequelize";
+import dotenv from 'dotenv';
 
-// Khởi tạo kết nối database
-const sequelize = new Sequelize("crud_faq_db", "root", "Phuocsud.t@2003", {
-  host: "localhost",
-  port: 3306,
-  dialect: "mysql",
-  logging: false, // Bật để xem SQL queries
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
+// Load biến môi trường từ file .env
+dotenv.config();
+
+// Khởi tạo kết nối database với Railway
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    dialect: 'mysql',
+    logging: console.log, // Bật để xem SQL queries
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+    },
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      }
+    }
   }
-});
+);
 
 // Hàm kiểm tra kết nối
 const testConnection = async () => {
