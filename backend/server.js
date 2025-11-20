@@ -87,7 +87,7 @@ const startServer = async () => {
     console.log("✅ Đã đồng bộ hóa models với database");
 
     // 3️⃣ Khởi động server
-    app.listen(PORT, "0.0.0.0", () => {
+    app.listen(PORT, () => {
       console.log(`🚀 Server đang chạy trên port ${PORT}`);
     });
 
