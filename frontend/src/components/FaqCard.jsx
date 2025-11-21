@@ -88,12 +88,13 @@ const FaqCard = ({ faq, onDelete }) => {
           >
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <div style={{ marginRight: 8 }}>{faq?.title}</div>
-              <div>{faq?.isTemporarySaved && (
-                <div style={{ width: 53, height: 16, position: 'relative', background: '#555555', borderRadius: 8, cursor: 'pointer' }}>
-                  <div style={{ width: 37, height: 13, left: 8, top: 0.50, position: 'absolute', textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'white', fontSize: 10, fontFamily: 'Noto Sans KR', fontWeight: '400', lineHeight: 35, wordWrap: 'break-word' }}
-                    onClick={handleTemporaryEdit} >임시저장</div>
-                </div>
-              )}</div>
+              <div>
+                {isAdmin && faq?.isTemporarySaved && (
+                  <div style={{ width: 53, height: 16, position: 'relative', background: '#555555', borderRadius: 8, cursor: 'pointer' }}>
+                    <div style={{ width: 37, height: 13, left: 8, top: 0.50, position: 'absolute', textAlign: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', color: 'white', fontSize: 10, fontFamily: 'Noto Sans KR', fontWeight: '400', lineHeight: 35, wordWrap: 'break-word' }}
+                      onClick={handleTemporaryEdit} >임시저장</div>
+                  </div>
+                )}</div>
             </div>
           </Col>
           <Col

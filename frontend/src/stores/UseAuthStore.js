@@ -56,9 +56,9 @@ const UseAuthStore = create(
             signout: async () => {
                 try {
                     get().clearState();
-                    await AuthService.signout();
-
                     localStorage.removeItem("auth-storage"); // xóa toàn bộ dữ liệu persist
+                    sessionStorage.clear();       // nếu bạn có dùng sessionStorage
+                    await AuthService.signout();
                     console.log("Đăng xuất thành công! Chuyển sang trang đăng nhập");
                 } catch (error) {
                     console.error(error);

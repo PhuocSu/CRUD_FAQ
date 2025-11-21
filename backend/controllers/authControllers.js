@@ -118,8 +118,10 @@ export const signout = async (req, res) => {
         const refreshToken = req.cookies?.refreshToken;
 
         if (refreshToken) {
+            console.log("Refresh Token: ", refreshToken)
             await Session.destroy({ where: { refreshToken } })
             res.clearCookie("refreshToken")
+            console.log("Refresh Token đã được xóa hay chưa", refreshToken)
         }
 
         return res.sendStatus(204)

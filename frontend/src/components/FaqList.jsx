@@ -24,6 +24,7 @@ const FaqList = ({ faqs, onDelete }) => {
   return (
     <div>
       {
+
         sortedFaqs.map((faq) => {
           return (
             <FaqCard

@@ -23,7 +23,7 @@ const AppHeader = () => {
     const handleSignout = async () => {
         try {
             await signout();
-            navigate('/signin');
+            navigate('/')
         } catch (error) {
             console.error('Logout failed:', error);
         }

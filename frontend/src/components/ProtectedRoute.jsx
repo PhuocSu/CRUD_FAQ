@@ -7,9 +7,6 @@ const ProtectedRoute = () => {
     const [starting, setStarting] = useState(true)
 
     const init = async () => {
-        if (!accessToken) {
-            await refresh()
-        }
 
         if (accessToken && !user) {
             await fetchMe()
