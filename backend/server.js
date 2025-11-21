@@ -32,24 +32,18 @@ app.use(requestHandler);
 
 // Middleware
 // Cho phép cả local dev và domain live
-const allowedOrigins = [
-  "http://localhost:5173", // local frontend
-  "https://crud-faq.onrender.com" // frontend live
-];
+const allowedOrigins =
+  process.env.NODE_ENV === 'development'
+    ? "http://localhost:5173"
+    : "https://crud-faq.onrender.com";
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true); // allow non-browser requests
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = "The CORS policy does not allow access from this origin.";
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
+  origin: allowedOrigins,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
 
 app.options('*', cors()); // cho preflight
 
