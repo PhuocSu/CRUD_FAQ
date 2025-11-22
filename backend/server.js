@@ -33,19 +33,12 @@ app.use(requestHandler);
 // Middleware
 // Cho phép cả local dev và domain live
 
-const corsOptions = {
-  origin: process.env.CLIENT_URL || "http://localhost:5173", // Sử dụng biến môi trường hoặc mặc định localhost:5173
+app.use(cors({
+  origin: process.env.CLIENT_URL,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  exposedHeaders: ["Set-Cookie"]
-};
-
-app.use(cors(corsOptions));
-
-// Xử lý preflight request
-app.options('*', cors(corsOptions));
-
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(express.json());
 app.use(cookieParser());
