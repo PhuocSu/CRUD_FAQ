@@ -31,14 +31,14 @@ app.use(requestHandler);
 // Note: We'll add errorHandler at the end of the file
 
 // Middleware
+// Cho phép cả local dev và domain live
+
 app.use(cors({
-  origin: true, // tự động lấy origin từ request
+  origin: process.env.CLIENT_URL,
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
-
 
 app.use(express.json());
 app.use(cookieParser());
