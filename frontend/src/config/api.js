@@ -1,18 +1,15 @@
 import axios from "axios";
 import UseAuthStore from "../stores/UseAuthStore";
 
-const BASE_URL =
-    import.meta.env.MODE === "development"
-        ? 'http://localhost:3002'
-        : ''
+const BASE_URL = import.meta.env.MODE === "development"
+    ? 'http://localhost:3002'
+    : ''; // production: same origin
 
 const api = axios.create({
     baseURL: BASE_URL,
-    withCredentials: true, //có ở đây thì dưới kia không cần
-    headers: {
-        'Content-Type': 'application/json',
-    },
-})
+    withCredentials: true,
+    headers: { 'Content-Type': 'application/json' },
+});
 console.log('API instance created with interceptors');
 
 //gán accessToken vào header

@@ -33,12 +33,25 @@ app.use(requestHandler);
 // Middleware
 // Cho phép cả local dev và domain live
 
-app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+if (process.env.NODE_ENV === 'development') {
+  const allowedOrigins = [
+    'http://localhost:5173', // FE dev
+  ];
+
+  app.use(cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    credentials: true
+  }));
+}
+// production: FE cùng domain, không cần cors
+
+
 
 app.use(express.json());
 app.use(cookieParser());
