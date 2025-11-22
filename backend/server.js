@@ -32,29 +32,20 @@ app.use(requestHandler);
 
 // Middleware
 // Cho phép cả local dev và domain live
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://crud-faq.onrender.com"
-];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error("Not allowed by CORS"));
-  },
+const corsOptions = {
+  origin: process.env.CLIENT_URL || "http://localhost:5173", // Sử dụng biến môi trường hoặc mặc định localhost:5173
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+  allowedHeaders: ["Content-Type", "Authorization"],
+  exposedHeaders: ["Set-Cookie"]
+};
 
+app.use(cors(corsOptions));
 
+// Xử lý preflight request
+app.options('*', cors(corsOptions));
 
-app.options('*', cors({
-  origin: allowedOrigins,
-  credentials: true
-})); // cho preflight
 
 app.use(express.json());
 app.use(cookieParser());
