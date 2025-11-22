@@ -33,25 +33,49 @@ app.use(requestHandler);
 // Middleware
 // Cho phép cả local dev và domain live
 
-if (process.env.NODE_ENV === 'development') {
-  const allowedOrigins = [
-    'http://localhost:5173', // FE dev
-  ];
+// if (process.env.NODE_ENV === 'development') {
+//   const allowedOrigins = [
+//     'http://localhost:5173', // FE dev
+//   ];
 
-  app.use(cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    credentials: true
-  }));
-}
+//   app.use(cors({
+//     origin: function (origin, callback) {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error('Not allowed by CORS'));
+//       }
+//     },
+//     credentials: true
+//   }));
+// }
 // production: FE cùng domain, không cần cors
 
+// CORS configuration
+const allowedOrigins = [
+  'http://localhost:5173', // Vite default port
+  'http://localhost:3000', // Common React port
+  process.env.CLIENT_URL   // Production URL
+].filter(Boolean); // Remove any falsy values
 
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin) || allowedOrigins.some(allowedOrigin =>
+      origin.startsWith('http://localhost:') ||
+      origin.startsWith('https://') && origin.endsWith(process.env.CLIENT_URL || '')
+    )) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+}));
 
 app.use(express.json());
 app.use(cookieParser());
