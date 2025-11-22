@@ -1,11 +1,10 @@
 import axios from "axios";
 import UseAuthStore from "../stores/UseAuthStore";
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL ||
-    (import.meta.env.MODE === "development"
+const BASE_URL =
+    import.meta.env.MODE === "development"
         ? 'http://localhost:3002'
-        : 'https://crud-faq.onrender.com'
-    );
+        : ''
 
 const api = axios.create({
     baseURL: BASE_URL,
